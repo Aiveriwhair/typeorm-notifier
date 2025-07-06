@@ -1,12 +1,9 @@
 import { NotificationType } from "../entities/notification.entity";
 
 export interface NotificationFilters {
-  type?: NotificationType | NotificationType[]; // Ex: 'info' ou ['error', 'warning']
+  type?: NotificationType | NotificationType[]; // Ex: 'info' or ['error', 'warning']
   isRead?: boolean;
   isArchived?: boolean;
-
-  before?: Date; // createdAt < before
-  after?: Date; // createdAt > after
 
   scheduled?: boolean; // true → uniquement les planifiées (scheduledAt > now)
   expired?: boolean; // true → uniquement les expirées (expiresAt < now)

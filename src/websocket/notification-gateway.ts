@@ -3,8 +3,8 @@ import { ChannelResolver, NotificationAuthFunction } from "../core/types";
 import { Logger } from "../logger/logger.interface";
 import { Server, Socket } from "socket.io";
 
-const USER_PREFIX = "user:";
-const CHANNEL_PREFIX = "channel:";
+const USER_PREFIX = "user";
+const CHANNEL_PREFIX = "channel";
 const NOTIFICATION_EVENT = "t-notification";
 
 export class NotificationGateway {
@@ -48,13 +48,12 @@ export class NotificationGateway {
     socket: Socket,
     userId: string
   ): Promise<string[]> {
-    socket.join(`${USER_PREFIX}${userId}`);
-
+    socket.join(`${USER_PREFIX}:${userId}`);
     let channels: string[] = [];
 
     try {
       channels = await this.channelResolve(userId);
-      channels.forEach((c) => socket.join(`${CHANNEL_PREFIX}${c}`));
+      channels.forEach((c) => socket.join(`${CHANNEL_PREFIX}:${c}`));
     } catch (err) {
       this.logger.error("Error resolving channels", { userId, error: err });
       throw err;
@@ -70,13 +69,13 @@ export class NotificationGateway {
 
   emitToUser(userId: string, notification: NotificationEntity) {
     this.io
-      .to(`${USER_PREFIX}${userId}`)
+      .to(`${USER_PREFIX}:${userId}`)
       .emit(NOTIFICATION_EVENT, notification);
   }
 
   emitToChannel(channel: string, notification: NotificationEntity) {
     this.io
-      .to(`${CHANNEL_PREFIX}${channel}`)
+      .to(`${CHANNEL_PREFIX}:${channel}`)
       .emit(NOTIFICATION_EVENT, notification);
   }
 }

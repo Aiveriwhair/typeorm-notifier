@@ -35,8 +35,7 @@ export class NotificationEntity {
   content?: string;
 
   @Column({
-    type: "enum",
-    enum: NotificationType,
+    type: "text",
     default: NotificationType.INFO,
   })
   type!: NotificationType;
@@ -47,11 +46,11 @@ export class NotificationEntity {
   @Column({ type: "json", nullable: true })
   metadata?: Record<string, any>; // Pour passer des IDs, chemins, etc.
 
-  @Column({ type: "timestamp", nullable: true })
+  @Column({ type: "datetime", nullable: true })
   @Index()
   expiresAt?: Date;
 
-  @Column({ type: "timestamp", nullable: true })
+  @Column({ type: "datetime", nullable: true })
   @Index()
   scheduledAt?: Date;
 
@@ -67,6 +66,6 @@ export class NotificationEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @Column()
-  readAt!: Date; // Date de lecture, null si non lu
+  @Column({ nullable: true, type: "datetime" })
+  readAt?: Date;
 }

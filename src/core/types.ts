@@ -1,4 +1,4 @@
-export type NotificationType = "info" | "warning" | "error" | "custom";
+import { NotificationType } from "../entities/notification.entity";
 
 export interface NotificationPayload {
   userId?: string; // Notification ciblée
