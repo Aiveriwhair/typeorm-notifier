@@ -1,30 +1,12 @@
 # typeorm-notifier
 
-This is a basic express server setup with error handling, normalized responses and logging.
+Plug and play notification system for TypeORM entities.
 
-## License
+## Features
 
-MIT License
-
-Copyright (c) [2024] [William ISABELLE]
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+- **Notification**: Send notifications when entities are created, updated, or deleted.
+- **Read/Unread**: Track read/unread status of notifications.
+- **Customizable**: Easily extendable to fit your needs.
 
 ## Installation
 
@@ -32,28 +14,14 @@ SOFTWARE.
 npm install
 ```
 
+## Run tests
+
+Test the NotificationService with:
+
+```bash
+npx ts-node demo/api-test.ts
+```
+
 ## Usage
 
-### Build the project
-
-```bash
-npm run build
-```
-
-### Start the server
-
-```bash
-npm run start
-```
-
-### Start the server in watch mode
-
-```bash
-npm run dev
-```
-
-## Development
-
-```bash
-npm run dev
-```
+TODO
