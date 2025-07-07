@@ -6,7 +6,10 @@ import {
   NotificationType,
 } from "../entities/notification.entity";
 import { INotificationTransport } from "../transports/notification-transport.interface";
-import { NotificationFilters } from "./notification-filters";
+import {
+  defaultNotificationFilters,
+  NotificationFilters,
+} from "./notification-filters";
 
 export class NotificationEntityService {
   constructor(
@@ -55,7 +58,10 @@ export class NotificationEntityService {
     );
   }
 
-  async getUserNotifications(userId: string, filters: NotificationFilters) {
+  async getUserNotifications(
+    userId: string,
+    filters: NotificationFilters = defaultNotificationFilters
+  ) {
     const query = this.repo
       .createQueryBuilder("notification")
       .where("notification.userId = :userId", { userId });
@@ -85,10 +91,11 @@ export class NotificationEntityService {
       // False = expiresAt >= now
       query.andWhere("notification.expiresAt >= :now", { now: new Date() });
     }
+
     if (filters.active) {
       // True = not expired and valid now
       query.andWhere(
-        "notification.expiresAt >= :now AND notification.scheduledAt <= :now",
+        "notification.expiresAt IS NULL OR notification.expiresAt >= :now AND notification.scheduledAt <= :now",
         { now: new Date() }
       );
     } else if (filters.active === false) {
