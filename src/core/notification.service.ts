@@ -177,9 +177,20 @@ export class NotificationEntityService {
   }
 
   async countUnread(userId: string): Promise<number> {
-    const count = await this.repo.count({
-      where: { userId, isRead: false },
-    });
-    return count;
+    const now = new Date();
+
+    return this.repo
+      .createQueryBuilder("notification")
+      .where("notification.userId = :userId", { userId })
+      .andWhere("notification.isRead = false")
+      .andWhere(
+        "(notification.expiresAt IS NULL OR notification.expiresAt >= :now)",
+        { now }
+      )
+      .andWhere(
+        "(notification.scheduledAt IS NULL OR notification.scheduledAt <= :now)",
+        { now }
+      )
+      .getCount();
   }
 }

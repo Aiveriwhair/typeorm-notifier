@@ -5,6 +5,7 @@ import { NotificationType } from "../src/entities/notification.entity";
 import { INotificationTransport } from "../src/transports/notification-transport.interface";
 import { Logger } from "../src/logger/logger.interface";
 import { NotificationEntityService } from "../src/core/notification.service";
+import { assert } from "console";
 
 /**
  * This script demonstrates how to use the NotificationEntityService
@@ -71,30 +72,54 @@ async function runTests() {
     active: true,
   });
   console.log(`🔍 Notifications actives: ${activeNotifs.length}`);
+  assert(
+    activeNotifs.length === 2,
+    "Il devrait y avoir 2 notifications actives"
+  );
 
   // === Marquer une notif comme lue ===
   if (activeNotifs[0]) {
     await service.markAsRead(activeNotifs[0].id, "u123");
-    console.log(`✅ Notification ${activeNotifs[0].id} marquée comme lue`);
+    const updated = await repo.findOneByOrFail({ id: activeNotifs[0].id });
+    console.log(`✅ Notification ${updated.id} marquée comme lue`);
+    assert(
+      updated.isRead === true,
+      "La notification devrait être marquée comme lue"
+    );
   }
 
   // === Compter les non lues ===
   const unreadCount1 = await service.countUnread("u123");
   console.log(`🔢 Non lues : ${unreadCount1}`);
+  assert(unreadCount1 === 1, "Il devrait y avoir 1 notification non lue");
 
   // === Marquer tout comme lu ===
   await service.markAllAsRead("u123");
   console.log(`✅ Toutes les notifications marquées comme lues`);
+  assert(
+    (await service.countUnread("u123")) === 0,
+    "Il ne devrait plus y avoir de notifications non lues"
+  );
 
   // === Archiver une notif ===
   if (activeNotifs[1]) {
-    await service.archive(activeNotifs[1].id, "u123");
+    const archivedNotif = await service.archive(activeNotifs[1].id, "u123");
     console.log(`📦 Notification ${activeNotifs[1].id} archivée`);
+    assert(
+      archivedNotif.isArchived === true,
+      "La notification devrait être marquée comme archivée"
+    );
   }
 
   // === Compter les non lues ===
   const unreadCount2 = await service.countUnread("u123");
   console.log(`🔢 Non lues : ${unreadCount2}`);
+  assert(
+    unreadCount2 === 0,
+    "Il ne devrait plus y avoir de notifications non lues"
+  );
+
+  console.log("✅ Tous les tests ont réussi !");
 
   await dataSource.destroy();
 }
