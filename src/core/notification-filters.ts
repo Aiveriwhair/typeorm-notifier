@@ -15,3 +15,17 @@ export interface NotificationFilters {
   sortBy?: "createdAt" | "scheduledAt";
   sortOrder?: "ASC" | "DESC";
 }
+
+export const defaultNotificationFilters: NotificationFilters = {
+  type: undefined,
+  isRead: undefined,
+  isArchived: undefined,
+  scheduled: undefined,
+  expired: undefined,
+  active: undefined,
+  search: undefined,
+  limit: undefined,
+  offset: undefined,
+  sortBy: "createdAt",
+  sortOrder: "DESC",
+};
