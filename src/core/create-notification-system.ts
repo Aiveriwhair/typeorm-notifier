@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { Server } from "socket.io";
 
 import { Logger } from "../logger/logger.interface";
@@ -30,7 +30,17 @@ export const createNotificationSystem = ({
   authFn,
   channelResolver,
 }: CreateNotificationSystemOptions) => {
-  const repository = dataSource.getRepository(NotificationEntity);
+  let repo: Repository<NotificationEntity>;
+  try {
+    repo = dataSource.getRepository(NotificationEntity);
+    if (
+      !repo.manager.connection.entityMetadatasMap.has(NotificationEntity.name)
+    ) {
+      throw new Error("NotificationEntity not found in data source");
+    }
+  } catch (e) {
+    throw new Error("NotificationEntity repository not found");
+  }
 
   if (useSocket) {
     const gateway = new NotificationGateway(
@@ -45,7 +55,7 @@ export const createNotificationSystem = ({
     transports.push(socketTransport);
   }
 
-  const service = new NotificationEntityService(repository, transports, logger);
+  const service = new NotificationEntityService(repo, transports, logger);
 
   return service;
 };

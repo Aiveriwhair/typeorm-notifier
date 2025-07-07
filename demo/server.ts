@@ -1,9 +1,9 @@
 import { Server } from "socket.io";
 import { createServer } from "http";
 import { DataSource } from "typeorm";
-import { NotificationEntity } from "../src/entities/notification.entity";
 import { createNotificationSystem } from "../src/core/create-notification-system";
 import { defaultLogger } from "../src/logger/default-logger";
+import { NotificationEntity } from "../src/entities/notification.entity";
 
 // === Setup HTTP and WebSocket servers ===
 const httpServer = createServer();
@@ -26,7 +26,6 @@ async function bootstrap() {
   const notif = createNotificationSystem({
     dataSource,
     io,
-    logger: defaultLogger,
     transports: [],
     authFn: async (socket) => {
       return { userId: "u123" };
